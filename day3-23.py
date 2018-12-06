@@ -1,5 +1,5 @@
 #filePath = "day3Puzzle1Sample.txt"
-filePath = "day3Puzzle.txt"
+filePath = "day3Puzzle1.txt"
 
 class Claim:
     def __init__(self, rawInput):
@@ -19,24 +19,12 @@ class Claim:
         sizeSplit = size.split("x")
         self.sizeX = int(sizeSplit[0])
         self.sizeY = int(sizeSplit[1])
-
-        yCounter = 0
-        self.plannedCoordinates = []
-        while yCounter<self.sizeY:
-            xCounter = 0
-            while xCounter<self.sizeX:            
-                self.plannedCoordinates.append(str(self.locationX + xCounter) + "|" + str(self.locationY + yCounter))
-                xCounter+=1
-            yCounter+=1
-
         self.hasConflicts = False
 
     def compareForConflicts(self, otherClaim):
-        for coord in self.plannedCoordinates:
-            if coord in otherClaim.plannedCoordinates:
-                self.hasConflicts = True
-                otherClaim.hasConflcits = True
-                break
+        if not (self.locationX > otherClaim.locationX + otherClaim.sizeX-1 or otherClaim.locationX > self.locationX + self.sizeX-1 or self.locationY > otherClaim.locationY + otherClaim.sizeY-1 or otherClaim.locationY > self.locationY + self.sizeY-1):
+            self.hasConflicts = True
+            otherClaim.hasConflcits = True
 
 
 class Main:
@@ -48,16 +36,6 @@ class Main:
         for line in lines[:]:
             claims.append(Claim(line))
         
-        i = 0
-        while i<len(claims):            
-            if not claims[i].hasConflicts:
-                j = 0
-                while j<len(claims):
-                    if not claims[j].hasConflicts and i!=j:
-                        claims[i].compareForConflicts(claims[j])
-                    j+=1
-            i+=1
-
         i = 0
         while i<len(claims):            
             if not claims[i].hasConflicts:
